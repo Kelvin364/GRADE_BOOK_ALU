@@ -9,7 +9,7 @@ def teacher_menu(gradebook):
         print("3. Register Student for Course")
         print("4. Calculate GPA")
         print("5. Calculate Ranking")
-        print("6. Search by Grade")
+        print("6. Search by GPA Range")
         print("7. Generate Transcript")
         print("8. Exit to Main Menu")
 
@@ -48,11 +48,12 @@ def teacher_menu(gradebook):
             headers = ["Rank", "Student Name", "GPA"]
             print(tabulate(table, headers, tablefmt="grid"))
         elif choice == '6':
-            grade = float(input("Enter grade to search for: "))
-            students = gradebook.search_by_grade(grade)
-            print("Students with the specified grade:")
-            table = [[student.names, student.email] for student in students]
-            headers = ["Student Name", "Email"]
+            min_gpa = float(input("Enter minimum GPA: "))
+            max_gpa = float(input("Enter maximum GPA: "))
+            students = gradebook.search_by_GPA_range(min_gpa, max_gpa)
+            print(f"Students with GPA between {min_gpa} and {max_gpa}:")
+            table = [[student.names, student.email, student.GPA] for student in students]
+            headers = ["Student Name", "Email", "GPA"]
             print(tabulate(table, headers, tablefmt="grid"))
         elif choice == '7':
             student_email = input("Enter student email: ")
@@ -129,12 +130,13 @@ def main():
     gradebook = GradeBook()
 
     while True:
+        print("\n------Welcome to the ALU School system------")
         print("\nMain Menu:")
         print("1. Teacher")
         print("2. Student")
         print("3. Exit")
 
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
 
         if choice == '1':
             email = input("Enter your email: ")

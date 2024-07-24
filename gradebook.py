@@ -11,8 +11,8 @@ class Student:
         total_credits = sum(course.credits for course in self.courses_registered)
         if total_credits == 0:
             return 0
-        total_points = sum(course.grade * course.credits for course in self.courses_registered)
-        self.GPA = total_points / total_credits
+        total_points = sum((course.grade / 100) * course.credits for course in self.courses_registered)
+        self.GPA = total_points
         return self.GPA
 
     def register_for_course(self, course):
@@ -33,7 +33,7 @@ class Student:
             if question['correct_option'] == int(answer) - 1:
                 correct_answers += 1
 
-        grade = (correct_answers / len(course.evaluation)) * 100
+        grade = (correct_answers / 5) * 100
         course.grade = grade
         self.calculate_GPA()
         print(f"Your grade for {course_name} is: {grade}")
@@ -108,8 +108,8 @@ class GradeBook:
     def calculate_ranking(self):
         return sorted(self.student_list, key=lambda s: s.GPA, reverse=True)
 
-    def search_by_grade(self, grade):
-        return [student for student in self.student_list if any(course.grade == grade for course in student.courses_registered)]
+    def search_by_GPA_range(self, min_gpa, max_gpa):
+        return [student for student in self.student_list if min_gpa <= student.GPA <= max_gpa]
 
     def generate_transcript(self, student_email):
         student = next((s for s in self.student_list if s.email == student_email), None)
